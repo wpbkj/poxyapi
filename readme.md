@@ -3,9 +3,9 @@
 
 ## 简介
 
-无为API管控系统由PHP构建，开发人员：[WPBKJ](https://www.wpbkj.com/)
+无为API管控系统由PHP+MySQL构建，开发人员：[WPBKJ](https://www.wpbkj.com/)
 
-支持API限定次数访问，API访问数据分析等API分析工具，帮助API管理员更好的管理API数据，实时监控API使用情况。
+[![wpbkj/无为API管控系统_PHP](https://gitee.com/wpbkj/poxyapi/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/wpbkj/poxyapi)
 
 相关功能正在开发中
 
@@ -19,12 +19,12 @@ Email:wpbkj123@163.com
 ### 1、将仓库所有文件下载到服务器
 
 ### 2、完成站点配置（同其他PHP类CMS）
-
 在服务器面板或使用PHP Server完成站点配置
 > 注意：由于本程序在rewrite配置后可更好表现，请使用Nginx/Apache + PHP 便于配置rewrite
 
 ### 3、完成rewrite配置
 rewrite配置：
+
 Nginx Rewrite：
 ``` nginx
 location / {
