@@ -17,9 +17,12 @@ Email:wpbkj123@163.com
 ## 使用
 
 ###1、将仓库所有文件下载到服务器
+
 ###2、完成站点配置（同其他PHP类CMS）
+
 在服务器面板或使用PHP Server完成站点配置
 > 注意：由于本程序在rewrite配置后可更好表现，请使用Nginx/Apache + PHP 便于配置rewrite
+
 ###3、完成rewrite配置
 rewrite配置：
 Nginx Rewrite：
