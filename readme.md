@@ -48,7 +48,11 @@ RewriteRule ^(.*) index.php
 ```
 ### 4、安装程序
 上述配置完成后直接访问网站首页进行数据库，网站默认配置等相关设置即可
-
+#### 安装界面截图
+![Info](https://www.wpbkj.com/poxyapi/1.png)
+![step1](https://www.wpbkj.com/poxyapi/2.png)
+![step2](https://www.wpbkj.com/poxyapi/3.png)
+![step3](https://www.wpbkj.com/poxyapi/4.png)
 
 
 
