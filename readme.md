@@ -56,7 +56,7 @@ RewriteRule ^(.*) index.php
 
 ### 5、体验
 安装完后由于功能上不完善，本程序先预制了一个1-100随机数api，可供用户体验功能  
-文件地址：`/user/module/rand.php`
+文件地址：`/user/module/rand.php`  
 链接：  
 开启rewrite：`/api/rand.api`  
 未开启erwrite：`/index.php/api/rand.api`  
