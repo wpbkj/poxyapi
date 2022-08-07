@@ -54,5 +54,13 @@ RewriteRule ^(.*) index.php
 ![step2](https://www.wpbkj.com/poxyapi/3.png)
 ![step3](https://www.wpbkj.com/poxyapi/4.png)
 
+### 5、体验
+安装完后由于功能上不完善，本程序先预制了一个1-100随机数api，可供用户体验功能  
+文件地址：`/user/module/rand.php`
+链接：  
+开启rewrite：`/api/rand.api`  
+未开启erwrite：`/index.php/api/rand.api`  
+返回示例：  
+> {"status":"successfull","result":67}
 
 

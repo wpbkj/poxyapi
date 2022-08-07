@@ -122,9 +122,9 @@ if (mysqli_connect_errno(\$conn))
     InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (1, 'title', '{$title}', NULL)");
     InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (2, 'preurl', '{$preUrl}', NULL)");
     if($_POST['rewrite']=='yes'){
-        InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (3, 'rewrite', 1, NULL)");
+        InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (3, 'urlCon', 2, NULL)");
     }else{
-        InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (3, 'rewrite', 0, NULL)");
+        InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (3, 'urlCon', 1, NULL)");
     }
 }elseif($step=='4'&&isset($_POST['username'])&&isset($_POST['email'])&&isset($_POST['password'])){
     $username = trim($_POST['username']);
