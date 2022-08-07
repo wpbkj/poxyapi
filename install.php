@@ -2,6 +2,14 @@
 /** POXYAPI安装文件 */
 session_start();
 
+if(file_exists('poxyapi.installed')){
+    exit('程序已安装，如需重新安装请删除根目录的 poxyapi.installed 文件');
+}
+
+if(file_exists('config.php')){
+    require_once('config.php');
+}
+
 $step=trim($_GET['step']);
 if(empty($step)){
     $step='preInfo';
@@ -44,16 +52,35 @@ function checkDBConn($host,$port,$username,$password,$DBname){
 }
 
 /** 创建表 */
-function createTable($conn){
-    mysqli_query($conn,"CREATE TABLE sysset (
-        ID INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        name text NOT NULL,
-        value1 text NULL,
-        value2 text NULL,
-    )");
+function CreateTable($conn,$tableName,$detail){
+    mysqli_query($conn,"CREATE TABLE `poxyapi_wpbkj`.`{$tableName}` ( {$detail})");
 }
 
 /** 插入数据库 */
+function InsertData($conn,$tableName,$detail){
+    mysqli_query($conn,"INSERT INTO `{$tableName}` $detail");
+}
+
+/** 获取页面URL */
+function is_https() {
+    if ( !empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+        return 'https://';
+    } elseif ( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+        return 'https://';
+    } elseif ( !empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off') {
+        return 'https://';
+    }else{
+        return 'http://';
+    }
+}
+
+function POXYAPI_getHOST(){
+$hs=is_https();
+
+$url=$hs.$_SERVER['HTTP_HOST'].'/';
+
+return $url;
+}
 
 if($_POST['agreement']=='on'){
     $_SESSION['agreement']='on';
@@ -84,15 +111,31 @@ if (mysqli_connect_errno(\$conn))
     die();
 }";
         file_put_contents('config.php',$text);
+        CreateTable($conn,'sysset','`ID` INT(11) NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , `value1` TEXT NULL , `value2` TEXT NULL , PRIMARY KEY (`ID`)');
     }else{
         $_SESSION['DBError']='数据库连接验证失败，请重新配置数据库';
         header('location:install.php?step=1');
     }
+}elseif($step=='3'&&isset($_POST['title'])&&isset($_POST['preurl'])){
+    $title = trim($_POST['title']);
+    $preUrl = trim($_POST['preurl']);
+    InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (1, 'title', '{$title}', NULL)");
+    InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (2, 'preurl', '{$preUrl}', NULL)");
+    if($_POST['rewrite']=='yes'){
+        InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (3, 'rewrite', 1, NULL)");
+    }else{
+        InsertData($conn,'sysset',"(`ID`, `name`, `value1`, `value2`) VALUES (3, 'rewrite', 0, NULL)");
+    }
+}elseif($step=='4'&&isset($_POST['username'])&&isset($_POST['email'])&&isset($_POST['password'])){
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = md5(trim($_POST['password']));
+    CreateTable($conn,'admin','`ID` INT(11) NOT NULL AUTO_INCREMENT , `username` VARCHAR(200) NOT NULL , `email` VARCHAR(200) NULL , `password` VARCHAR(300) NULL , PRIMARY KEY (`ID`)');
+    InsertData($conn,'admin',"(`ID`, `username`, `email`, `password`) VALUES (1, '{$username}', '{$email}', '{$password}')");
+    file_put_contents('poxyapi.installed','1');
 }
 
-if(file_exists('config.php')){
-    require_once('config.php');
-}
+
 ?>
 <!doctype html>
 <html>
@@ -190,7 +233,7 @@ if(isset($_SESSION['DBError'])){
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">密码:</span>
-                    <input type="password" class="form-control" placeholder="输入密码" name="DBPassword" required>
+                    <input type="text" class="form-control" placeholder="输入密码" name="DBPassword" required>
                     <div class="valid-feedback">已输入！</div>
                     <div class="invalid-feedback">请输入密码！</div>
                 </div>
@@ -212,13 +255,13 @@ if(isset($_SESSION['DBError'])){
                 </div>
 	            <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">默认域名:</span>
-		            <input type="text" class="form-control" placeholder="设置默认域名" name="preurl" required>
+		            <input type="text" class="form-control" placeholder="设置默认域名" name="preurl" value="<?php echo POXYAPI_getHOST(); ?>" required>
 		            <div class="valid-feedback">已输入！</div>
 		            <div class="invalid-feedback">请设置默认域名！</div>
                 </div>
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="mySwitch" name="rewrite" value="yes">
-                    <label class="form-check-label" for="mySwitch">Rewrite是否开启</label>
+                    <label class="form-check-label" for="mySwitch">选择Rewrite是否开启</label>
                 </div>
             </div>
             <br>
@@ -244,7 +287,7 @@ if(isset($_SESSION['DBError'])){
 	            </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">密码:</span>
-                    <input type="password" class="form-control" placeholder="输入密码" name="password" required>
+                    <input type="text" class="form-control" placeholder="输入密码" name="password" required>
                     <div class="valid-feedback">已输入！</div>
                     <div class="invalid-feedback">请输入密码！</div>
                 </div>
