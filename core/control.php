@@ -11,9 +11,8 @@ if(!defined('__POXYAPI_ROOT_DIR__')||
 	POXYAPI_error('没有定义POXYAPI常量','');
 	exit;
 }
-
-if(__POXYAPI_PAGE_CHARACTER__ == 'index'){
-	$urlEnd=$_SERVER['REQUEST_URI'];
+$urlEnd=$_SERVER['REQUEST_URI'];
+if(__POXYAPI_PAGE_CHARACTER__ == 'index'&&$urlEnd != '/'&&!empty($urlEnd)){
 	$arr=explode('/',$urlEnd);
 	$urlCon=POXYAPI_getSysSet('urlCon',$conn)[1];
 	if($urlCon=='1'){
@@ -23,9 +22,9 @@ if(__POXYAPI_PAGE_CHARACTER__ == 'index'){
 		$module=trim($arr[1]);
 		$page=trim($arr[2]);
 	}
-	
 	$page=explode('.',$page);
 	$packageDir=__POXYAPI_ROOT_DIR__.__POXYAPI_PACKAGE_DIR__.'/'.$page[0].'.php';
+	
 }else{
 	if(empty($_GET['core'])){
 		$core='index';
